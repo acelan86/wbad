@@ -7,29 +7,31 @@ var profileManager = (function () {
     return {
         getProfile : function () {
             return {
-                //pageSize : parseInt(window.localStorage[key + 'pageSize'], 10) || profile.pageSize,
                 url : window.localStorage[key + 'url'] || profile.url
             };
         },
         setProfile : function (url) {
             alert(url)
             window.localStorage[key + 'url'] = url;
-            //window.localStorage[key + 'pageSize'] = parseInt(pageSize, 10);
         }
     };
 })();
 
-chrome.tabs.onSelectionChanged.addListener(function(tabid) {
+function changeState(tabid) {
     chrome.tabs.get(tabid, function (tab) {
-        var icon = tab.url.indexOf('weibo.com') >= 0 ? './icon_16.png' : './icon_16_dis.png';
+        var icon;
+        if (tab.url.indexOf('weibo.com') >= 0) {
+            icon = './icon_16.png';
+            chrome.browserAction.setPopup({
+                popup : './popup.html',
+                tabId : tab.id
+            });
+        } else {
+            icon = './icon_16_dis.png';
+        }
         chrome.browserAction.setIcon({path : icon});
     });
-});
-chrome.browserAction.onClicked.addListener(function (tab) {
-    if (tab.url.indexOf('weibo.com') >= 0) {
-        chrome.browserAction.setPopup({
-            popup : './popup.html',
-            tabId : tab.id
-        });
-    }
-});
+}
+
+chrome.tabs.onUpdated.addListener(changeState);
+chrome.tabs.onSelectionChanged.addListener(changeState);
