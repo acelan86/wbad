@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charet="utf-8" />
+        <title>配置</title>
+        <style>
+            body, html{
+                padding:0px;
+                margin:0px;
+            }
+            body {
+                font-family: arial, sans-serif;
+                margin: 10px;
+                background: #EBEFF9;
+                font-size: 13px;
+            }
+            .form-wrap{
+                background-color: white;
+                border: 3px solid #BEC9CE;
+                border-bottom-left-radius: 20px 20px;
+                border-bottom-right-radius: 20px 20px;
+                border-top-left-radius: 20px 20px;
+                border-top-right-radius: 20px 20px;
+                padding: 30px;
+                text-align: left;
+                margin: 50px auto 20px auto;
+                height: auto;
+                width: 500px;
+            }
+            .form-row{
+                padding:0px 55px;
+            }
+            h4 {
+                padding-left: 0.5em;
+                border-bottom: 2px dotted #C3C3C3;
+                color: #333;
+                line-height: 28px;
+                font-size: 15px;
+            }
+            h2{
+                margin: 0px;
+                font-size:30px;
+                padding:0px 10px;
+                padding-left:80px;
+                background:url('icon_48.png') no-repeat left center;
+                line-height:60px;
+            }
+            input[type="submit"],
+            input[type="reset"]{
+                border: 1px solid #CCC;
+                border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+                border-bottom-color: #B3B3B3;
+                border-radius: 4px;
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
+                display: inline-block;
+                padding: 4px 10px 4px;
+                margin: 0;
+                margin-left:4px;
+                font-size: 13px;
+                line-height: 18px;
+                color: #fff;
+                text-align: center;
+                text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+                vertical-align: middle;
+                cursor: pointer;
+                background-color:#0074cc;
+                background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0055cc));
+                background-image:-webkit-linear-gradient(top, #0088cc, #0055cc);
+            }
+            input[type="text"]{
+                font-size:20px;
+                font-weight:bold;
+                height:30px;
+                width:100%;
+                border:1px solid #aaa;
+            }
+            input[type="text"]:focus{
+                border-color:#0074cc;
+                outline:none;
+            }
+          input[type="reset"]{
+                color:#333;
+                text-shadow:none;
+                background-color:#0c0c0c;
+                background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#f0f0f0), to(#d0d0d0));
+                background-image:-webkit-linear-gradient(top, #f0f0f0, #d0d0d0);
+          }
+          .form-footer{
+            text-align: right;
+            margin-top:40px;
+          }
+          .info{
+            background:lightyellow;
+            color:#333;
+            font-size:12px;
+            padding:4px 10px;
+            margin:0px 10px;
+            display:none;
+            line-height:14px;
+          }
+        </style>
+    </head>
+    <body>
+        <div class="form-wrap">
+            <form action="#" id="configForm">
+            <h2 class="form-header">配置<span class="info" id="info"></span></h2>
+            <div class="form-body">
+                <h4>获取广告url：</h4>
+                <div class="form-row">
+                    <input id="Url" type="text"/>
+                </div>
+            </div>
+            <div class="form-footer"><input id="okBtn" type="submit" value="确定"/><input type="reset" value="重置" /></div>
+            </form>
+        </div>
+        <script src="./option.js"></script>
+    </body>
+</html>

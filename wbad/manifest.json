@@ -1,0 +1,29 @@
+{
+  "content_security_policy" : "script-src 'self'; object-src 'self';",
+  "content_scripts" : [{
+    "js" : ["wbad.js"],
+    "matches" : ["http://weibo.com/*"]
+    //"matches" : ["http://*/*"]
+  }],
+  "description" : "微博广告替换小助手",
+  "name": "微博广告替换小助手 by acelan",
+  "version": "1.0",
+  "permissions": [ "cookies", "http://*/*"],
+  "icons" : {
+    "16" : "icon_16.png",
+    "32" : "icon_32.png",
+    "48" : "icon_48.png"
+  },
+  "homepage_url" : "https://github.com/acelan86/wbad",
+  "browser_action": {
+      "default_title": "微博广告替换小助手",
+      "default_icon": "icon_16.png",
+      "default_popup": "popup.html"
+  },
+  "update_url": "https://github.com/acelan86/wbad/blob/master/manifest.xml",
+  "background" : {
+    "scripts" : ["background.js"]
+  },
+  "options_page": "options.html",
+  "manifest_version": 2
+}
