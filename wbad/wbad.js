@@ -1,27 +1,42 @@
 var _wbadExt = (function (w, d) {
-    var POSID_MAP = {
-        'pl_content_biztips' : {
-            'PDPS000000037693' : 1
-        },
-        'pl_rightmod_ads35' : {
-            'PDPS000000037694' : 1
-        },
-        'pl_bottom' : {
-        }
-    };
-    var defaultReplacer = {
+    var DEFAULT_REPLACE = {
         'wb_relinfo' : function () {
-            return '有' + parseInt(Math.random() * 20, 10)  + '人对此感兴趣';
+            return '有' + (parseInt(Math.random() * 20, 10) + 1)  + '人对此感兴趣';
         },
-        'wb_fy' : 'none'
+        'wb_fy' : 'none',
+        'wb_have_social_y' : 'none'
     };
-    function psid2posid(psid) {
-        for (var k in POSID_MAP) {
-            if (POSID_MAP[k][psid]) {
-                return k;
+
+    function insertInterest(html) {
+        var panel = document.getElementById('trustPagelet_recom_interestv5'),
+            dls = panel.getElementsByTagName('dl'),
+            last,
+            parent,
+            node;
+        if (dls && dls.length > 0) {
+            last = dls[dls.length - 1],
+            parent = last.parentNode,
+            node = document.createElement('div');
+            node.innerHTML = html;
+            parent.insertBefore(node.childNodes[0], last);
+            parent.removeChild(last);
+            last = null;
+        }
+    }
+    function decodeText(text) {
+        return decodeURIComponent(text.replace(/\+/g, ' ')).replace("try{{wb_func}(", '').replace(");}catch(e){}", '');
+    }
+    function psid2pos(psid) {
+        var ads = document.getElementsByTagName('div'),
+            i = 0,
+            ad;
+        while (ad = ads[i++]) {
+            var adData = ad.getAttribute('ad-data');
+            if (adData && adData.indexOf('&psid=' + psid + '&') >= 0) {
+                return ad;
             }
         }
-        return 0;
+        return null;
     }
     function fetchAD(url, callback) {
         var xhr = new XMLHttpRequest();
@@ -37,12 +52,6 @@ var _wbadExt = (function (w, d) {
         xhr.open('GET', url, true);
         xhr.send();
     };
-    function init () {
-        var div = d.createElement('div');
-        div.innerHTML = "小助手使用中";
-        div.style.cssText = "border-radius:2px;margin:2px;opacity:.7;z-index:99999;background-color:#000;color:#fff;padding:6px 10px; position:fixed;right:0px;top:0px;font-size:12px";
-        d.body.appendChild(div);
-    }
     function parseTemplate(source, data) {
         var toString = Object.prototype.toString,
             data = data || {};
@@ -54,7 +63,6 @@ var _wbadExt = (function (w, d) {
             return ('undefined' == typeof replacer ? '' : replacer);
         });
     }
-    init();
     return {
         /**
          * 替换广告
@@ -64,12 +72,14 @@ var _wbadExt = (function (w, d) {
         replace : function (url, posid) {
             var el;
 
-            fetchAD(url, function (text) {
+            fetchAD(url + '&_rnd=' + (+new Date()), function (text) {
                 var json,
                     html;
                 try {
                     json = JSON.parse(text);
-                } catch (e) {}
+                } catch (e) {
+                    alert("解析返回数据出错：" + text);
+                }
 
                 if (json && json.psid && json.creatives && json.creatives[0] && json.creatives[0].html) {
                     if ('string' === typeof json.creatives[0].html) {
@@ -78,10 +88,19 @@ var _wbadExt = (function (w, d) {
                         };
                     }
                     if (json.creatives[0].html.v5) {
-                        var posid = psid2posid(json.psid);
-                        if (posid && (el = document.getElementById(posid)) && (el = el.childNodes[0]) && el.getAttribute('ad-data')) { 
-                            html = json.creatives[0].html.v5;
-                            el.innerHTML = parseTemplate(decodeURIComponent(html.replace(/\+/g, ' ').replace("try{{wb_func}('", '').replace("');}catch(e){}", '')), defaultReplacer);
+                        html = decodeText(json.creatives[0].html.v5);
+                        if (json.psid === 'PDPS000000037704') {
+                            try {
+                                html = JSON.parse(html);
+                                //感兴趣的人，二次decode
+                                html = decodeText(html.data.html).replace(/\\"/g, '"');
+                                insertInterest(parseTemplate(html, DEFAULT_REPLACE));
+                            } catch (e) {
+                                alert("解析返回数据出错：" + text);
+                            }
+                        } else if (el = psid2pos(json.psid)) { 
+                            html = html.replace(/^'/, '').replace(/'$/, '');
+                            el.innerHTML = parseTemplate(html, DEFAULT_REPLACE);
                         }
                     }
                 } else {

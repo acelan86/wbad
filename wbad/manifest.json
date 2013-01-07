@@ -8,7 +8,7 @@
   "description" : "微博广告替换小助手",
   "name": "微博广告替换小助手 by acelan",
   "version": "1.0",
-  "permissions": [ "cookies", "http://*/*"],
+  "permissions": [ "tabs", "cookies", "http://*/*"],
   "icons" : {
     "16" : "icon_16.png",
     "32" : "icon_32.png",
@@ -17,8 +17,7 @@
   "homepage_url" : "https://github.com/acelan86/wbad",
   "browser_action": {
       "default_title": "微博广告替换小助手",
-      "default_icon": "icon_16.png",
-      "default_popup": "popup.html"
+      "default_icon": "icon_16.png"
   },
   "update_url": "https://github.com/acelan86/wbad/blob/master/manifest.xml",
   "background" : {

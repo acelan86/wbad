@@ -18,3 +18,18 @@ var profileManager = (function () {
         }
     };
 })();
+
+chrome.tabs.onSelectionChanged.addListener(function(tabid) {
+    chrome.tabs.get(tabid, function (tab) {
+        var icon = tab.url.indexOf('weibo.com') >= 0 ? './icon_16.png' : './icon_16_dis.png';
+        chrome.browserAction.setIcon({path : icon});
+    });
+});
+chrome.browserAction.onClicked.addListener(function (tab) {
+    if (tab.url.indexOf('weibo.com') >= 0) {
+        chrome.browserAction.setPopup({
+            popup : './popup.html',
+            tabId : tab.id
+        });
+    }
+});
